@@ -2,11 +2,10 @@
 <html lang="ja">
 	<head>
 		<meta charset="utf-8" />
-		<title>JavaScript Practice</title>
+		<title>運試し！</title>
 		<style>
-			body {
+			.rect {
 				display: flex;
-				flex-wrap: wrap;
 			}
 			.box {
 				width: 100px;
@@ -30,7 +29,7 @@
 			}
 
 			.normal {
-				background: #d6f7ef;
+				background: cadetblue;
 				transform: scale(0.9);
 			}
 
@@ -38,22 +37,38 @@
 				background: #9b9b9b;
 				transform: scale(0.9);
 			}
+
+			h3 {
+				color: white;
+			}
 		</style>
 	</head>
 	<body>
+		<h1 id="unsei">今日の運勢は！？</h1>
+		<div class="rect">
+			<h3 class="box"></h3>
+			<h3 class="box"></h3>
+			<h3 class="box"></h3>
+			<h3 class="box"></h3>
+
+			<h3 class="box"></h3>
+			<h3 class="box"></h3>
+			<h3 class="box"></h3>
+			<h3 class="box"></h3>
+			<h3 class="box"></h3>
+			<h3 class="box"></h3>
+		</div>
 		<script>
 			"use strict";
 
 			const num = 10;
 			let a = [0, 0, 0, 1, 1, 1, 2, 2, 2, 3];
-			const winner = Math.floor(Math.random() * num); // 0 - 4
+			let touchNum = 1;
 
 			function shuffle() {
 				let i = a.length - 1;
 				while (i > 0) {
-					//乱数生成を使ってランダムに取り出す値を決める
 					let r = Math.floor(Math.random() * (i + 1));
-					//取り出した値と箱の外の先頭の値を交換する
 					let tmp = a[i];
 					a[i] = a[r];
 					a[r] = tmp;
@@ -63,27 +78,42 @@
 
 			shuffle();
 
-			for (let i = 0; i < num; i++) {
-				const div = document.createElement("div");
-				div.classList.add("box");
+			const h3s = document.getElementsByTagName("h3");
 
-				div.addEventListener("click", () => {
+			for (let i = 0; i < num; i++) {
+				const h = h3s[i];
+				h.classList.add("box");
+			}
+
+			for (let i = 0; i < num; i++) {
+				const h = h3s[i];
+				h.addEventListener("click", () => {
 					if (a[i] === 3) {
-						div.textContent = "大吉!";
-						div.classList.add("excellent");
+						unsei.innerHTML = "今日の運勢は大吉でした！（" + touchNum + "回目）";
+						h.textContent = "大吉!";
+						h.classList.add("excellent");
+						touchNum++;
+						a[i] = -1; //既に選択されている要素を押してもunseiが書き変わらないようにする。
 					} else if (a[i] === 2) {
-						div.textContent = "中吉!";
-						div.classList.add("good");
+						unsei.innerHTML = "今日の運勢は中吉でした！（" + touchNum + "回目）";
+						h.textContent = "中吉!";
+						h.classList.add("good");
+						a[i] = -1;
+						touchNum++;
 					} else if (a[i] === 1) {
-						div.textContent = "小吉!";
-						div.classList.add("normal");
-					} else {
-						div.textContent = "凶!";
-						div.classList.add("bad");
+						unsei.innerHTML = "今日の運勢は小吉でした！（" + touchNum + "回目）";
+						h.textContent = "小吉!";
+						h.classList.add("normal");
+						a[i] = -1;
+						touchNum++;
+					} else if (a[i] === 0) {
+						unsei.innerHTML = "今日の運勢は凶でした...残念！（" + touchNum + "回目）";
+						h.textContent = "凶!";
+						h.classList.add("bad");
+						a[i] = -1;
+						touchNum++;
 					}
 				});
-
-				document.body.appendChild(div);
 			}
 		</script>
 	</body>
